@@ -20,31 +20,43 @@ fn decode(opcode: &u64) -> Option::<fn(&u64, &u64) -> u64> {
     }
 }
 
-fn main() {
-    let mut file = BufReader::new(File::open("input.txt").expect("file not found"));
-    let mut line = String::new();
-    let _ = file.read_line(&mut line);
+fn run(noun: &u64, verb: &u64, numbers: &[u64]) -> u64 {
+    let mut memory = numbers.to_vec();
+    memory[1] = *noun;
+    memory[2] = *verb;
 
-    let mut numbers: Vec<u64> = line
-        .split(',')
-        .map(|n| n.parse().expect("Cannot convert to int"))
-        .collect();
-
-    numbers[1] = 12;
-    numbers[2] = 2;
-
-    for chunk in numbers.to_vec().chunks(4) {
+    for chunk in memory.to_vec().chunks(4) {
         let operator = decode(&chunk[0]);
 
         if operator.is_none() {
             break;
         }
 
-        let operand1 = numbers[chunk[1] as usize];
-        let operand2 = numbers[chunk[2] as usize];
+        let operand1 = memory[chunk[1] as usize];
+        let operand2 = memory[chunk[2] as usize];
 
-        numbers[chunk[3] as usize] = operator.unwrap()(&operand1, &operand2);
+        memory[chunk[3] as usize] = operator.unwrap()(&operand1, &operand2);
     }
 
-    println!("{}", numbers[0])
+    memory[0]
+}
+
+fn main() {
+    let mut file = BufReader::new(File::open("input.txt").expect("file not found"));
+    let mut line = String::new();
+    let _ = file.read_line(&mut line);
+
+    let numbers: Vec<u64> = line
+        .split(',')
+        .map(|n| n.parse().expect("Cannot convert to int"))
+        .collect();
+
+    'noun: for noun in 0 .. 99 {
+        '_verb: for verb in 0 .. 99 {
+            if run(&noun, &verb, &numbers) == 19690720 {
+                println!("{}", 100 * noun + verb);
+                break 'noun;
+            }
+        }
+    }
 }
