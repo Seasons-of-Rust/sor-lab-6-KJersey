@@ -1,7 +1,22 @@
 use std::{
     fs::File,
     io::{BufRead, BufReader},
+    cmp,
 };
+
+fn fuel_calc(mass: &u64, total: &mut u64) -> u64 {
+    let fuel = match (mass / 3).cmp(&2) {
+        cmp::Ordering::Less => 0,
+        _ => (mass / 3) - 2,
+    };
+
+    *total += fuel;
+
+    match fuel {
+        0 => *total,
+        _ => fuel_calc(&fuel, total),
+    }
+}
 
 fn main() {
     let numbers: Vec<u64> = BufReader::new(File::open("input.txt").expect("file not found"))
@@ -13,6 +28,6 @@ fn main() {
         })
         .collect();
 
-    let total: u64 = numbers.iter().map(|n| ((n / 3) - 2)).sum();
+    let total: u64 = numbers.iter().map(|n| fuel_calc(&n, &mut 0)).sum();
     println!("Total: {}", total);
 }
