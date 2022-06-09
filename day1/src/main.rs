@@ -1,7 +1,7 @@
 use std::{
+    cmp,
     fs::File,
     io::{BufRead, BufReader},
-    cmp,
 };
 
 fn fuel_calc(mass: &u64, total: &mut u64) -> u64 {
@@ -28,6 +28,6 @@ fn main() {
         })
         .collect();
 
-    let total: u64 = numbers.iter().map(|n| fuel_calc(&n, &mut 0)).sum();
+    let total: u64 = numbers.iter().map(|n| fuel_calc(n, &mut 0)).sum();
     println!("Total: {}", total);
 }

@@ -11,7 +11,7 @@ fn mul(operand1: &u64, operand2: &u64) -> u64 {
     operand1 * operand2
 }
 
-fn decode(opcode: &u64) -> Option::<fn(&u64, &u64) -> u64> {
+fn decode(opcode: &u64) -> Option<fn(&u64, &u64) -> u64> {
     match opcode {
         1 => Some(add),
         2 => Some(mul),
@@ -51,8 +51,8 @@ fn main() {
         .map(|n| n.parse().expect("Cannot convert to int"))
         .collect();
 
-    'noun: for noun in 0 .. 99 {
-        '_verb: for verb in 0 .. 99 {
+    'noun: for noun in 0..99 {
+        '_verb: for verb in 0..99 {
             if run(&noun, &verb, &numbers) == 19690720 {
                 println!("{}", 100 * noun + verb);
                 break 'noun;
