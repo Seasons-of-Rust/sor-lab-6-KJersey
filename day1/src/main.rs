@@ -23,7 +23,7 @@ fn main() {
         .lines() // Go through each line
         .map(|line| {
             line.expect("could not parse line") // Unwrap the result of the line
-                .parse() // Try to parse it to what we expect (i32 from the annotation)
+                .parse() // Try to parse it to what we expect (u64 from the annotation)
                 .expect("could not parse number") // Unwrap the result of the parse
         })
         .collect();
